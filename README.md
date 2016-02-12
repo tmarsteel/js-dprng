@@ -2,6 +2,8 @@
 
 Generate deterministic pesudo-random numbers, increase the seucrity of `Math.random()`. This implementation is particularly helpful when deterministic random sequences are required to be consistent across multiple platforms and languages. It relys only on simple bit operations that can easily be implemented consistently across many scripting languages (e.g. JavaScript, Python, PHP, Ruby)
 
+A PHP implementation that generates equal sequences for the same salts/seeds can be found [here](/tmarsteel/php-dprng)
+
 ## Usage
 Include the file or require() it.
 
