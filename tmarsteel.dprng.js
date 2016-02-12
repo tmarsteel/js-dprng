@@ -23,13 +23,7 @@ var tmarsteel;
 			};
 
 		this.next = function() {
-			// float numbers have 51 bits for precision => generate two 28bit numbers and combine them to a 51bit integer
-			// then divide 1 by it
-			var a = this.nextInt(0, 0xFFFFFFF),
-				b = this.nextInt(0, 0xFFFFFFF),
-				c = (a << 23) | (b & 0x7FFFFF);
-				
-			return 1 / c;
+			return this.nextInt(0, 0xFFFFFFF) / 0xFFFFFFF;
 		};
 			
 		this.nextFloat = function(min, max) {
