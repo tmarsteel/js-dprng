@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="tmarsteel.dprng.js"></script>
+		<script type="text/javascript">
+		function generate() {
+			var type = document.getElementById("type").value;
+			var rng = new tmarsteel.DPRNG();
+			var genBytes = function(n) {
+				if (type == "mrand")
+				{
+					var ar = [];
+					
+					for (var i = 0;i < n;i++)
+					{
+						ar.push(Math.floor(Math.random() * 256));
+					}
+						
+					return ar;
+				}
+				else
+				{
+					return rng.nextBytes(n);
+				}
+			};
+			
+			var out = document.getElementById("out");
+			out.innerHTML = "";
+			var outStr = "";
+			for (var k = 0;k < 100;k++)
+			{
+				var bytes = genBytes(256);
+				for (var b in bytes)
+				{
+					var bs = bytes[b].toString(16);
+					if (bs.length < 2)
+					{
+						bs = "0" + bs;
+					}
+					outStr += bs + " ";
+				}
+				
+				outStr += "\n";
+			}
+			
+			out.innerHTML = outStr;
+		}
+		</script>
+	</head>
+	<body>
+		<select id="type">
+			<option value="mrand">Math.random()</option>
+			<option value="dprng">tmarsteel.DPRNG</option>
+		</select>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" value="generate" onclick="generate()">
+		<pre style="font-family:monospace;" id="out"></pre>
+	</body>
+</html>
