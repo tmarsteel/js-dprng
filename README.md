@@ -52,4 +52,4 @@ Math.random() | IE 11.0.9600 | 7.992426 | 127.7681 | 27.49 | -0.008467 | 1.06 |
 Math.random() | Opera 35.0.2066.37 | 7.992634| 127.5248 | 38.81 | \-0.001458 | 0.88 |
 tmarsteel.DPRNG | any | 7.993173 | 127.2305 | 72.12 | 0.002086 | 1.24 |
 
-*The test-files can be found in the [ent-test directory](ent-test). You can run these tests yourself with the ent executable and the entTestfile.html script.*
+*You can run these tests yourself with the ent executable and the [entTestfile.html](ent-test/entTestfile.html) script.*
