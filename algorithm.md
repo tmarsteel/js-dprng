@@ -160,7 +160,7 @@ function nextBytes(n)
 	ar := new dynamic list
 
 	repeat n times
-		append nextInt(0, 255) to ar
+		append nextInt(0, FF) to ar
 	end repeat
 
 	return ar
