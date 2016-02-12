@@ -39,10 +39,10 @@ Here is a full list of the methods supported by `tmarsteel.DPRNG` objects and th
 Returns an uniformly distributed float value in the range `[0, 1)` (0 inclusive to 1 exclusive).
 
 **`float nextFloat(float from, float to)`**  
-Returns an uniformly distributed float value in the range `[from, to)` (`from` inclusive to `to` inclusive).
+Returns an uniformly distributed float value in the range `[from, to)` (`from` inclusive to `to` exclusive).
 
 **`int nextInt(int from, int to)`**  
-Returns an uniformly distributed integer in the range `[from, to)` (`from` inclusive to `to` inclusive).
+Returns an uniformly distributed integer in the range `[from, to]` (`from` inclusive to `to` inclusive).
 
 **`array nextBytes(int n)`**  
 Returns an array of length `n`. Each entry is a uniformly distributed integer between 0 and 255.
