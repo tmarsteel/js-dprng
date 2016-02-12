@@ -6,9 +6,9 @@ Test-Vectors are appended to this document (appendix 2 and 3).
 
 ## Terminology / Notation
 
-All operations consider the values to be represented in Big-Endian encoding (that is: MSB to LSB). All integer litaraly are written in hexadecimal notation.
+All operations consider the values to be represented in Big-Endian encoding (that is: MSB to LSB). Except the bit-lengths of data all integer litarals in this document are written in hexadecimal notation 
 
-The following table denotes the bitwise operation notation used in this document. It is the same as used in many modern programming languages; you can skip this if you are familiar with the bitwise operations C-Like languages.
+The following table denotes the bitwise operation notation used in this document. It is the same as used in many modern programming languages; you can skip this if you are familiar with the bitwise and math operations of C-Like languages.
 
 | Notation   | Operation |
 | ---------: | :-------  |
@@ -170,7 +170,7 @@ function nextBytes(n)
 
 The AES S-Box uniquely (that is: without collisions) maps a 8-bit integer to another 8-bit integer.
 
-The Rijndael S-Box can be implemented as a 1-dimensional array with 256 entries (index 00 to FF). The value of `sbox(x)` can then be determined by looking up the `x`th element from the array.
+The Rijndael S-Box can be implemented as a 1-dimensional array with 100 entries (index 00 to FF). The value of `sbox(x)` can then be determined by looking up the `x`th element from the array.
 
 ```
 63, 7c, 77, 7b, f2, 6b, 6f, c5, 30, 01, 67, 2b, fe, d7, ab, 76,
@@ -246,7 +246,7 @@ Output: ef8959c
 
 ## Appendix 3: Test-Vectors for the RNG
 
-You can use these test-vectors to test implementations of this algorithm. Every test vector denotes the first 20, the 40th to 50th and the 90th to 100th value of `nextInt(0, 255)` 
+You can use these test-vectors to test implementations of this algorithm. Every test vector denotes the first 20, the 40th to 50th and the 90th to 100th value of `nextInt(0, FF)` 
 
 ### Salt / initial state: `0000000`
 
