@@ -30,7 +30,7 @@ var bytes = rng.nextBytes(30); // 30 random integers in the range 0 to 255
 | :-- | :------ | -------------------------: | --------------: | ---------: | ----------------------: | ---------------------: |
 Math.random() | Chrome 44.0.2403 | 7.993701 | 127.5596 | 92.65 | \-0.017640 | 0.7 |
 Math.random() | Firefox 38.0.1 | 7.993797 | 127.8165 | 94.87 | -0.009468 | 0.94 |
-Math.random() | Edge | yet to be tested | yet to be tested | yet to be tested | yet to be tested | yet to be tested |
+Math.random() | Edge 25.10586 | 7.992885 | 128.0175 | 52.22 | -0.003019 | .85 |
 Math.random() | IE 11.0.9600 | 7.992426 | 127.7681 | 27.49 | -0.008467 | 1.06 |
 Math.random() | Opera 35.0.2066.37 | 7.992634| 127.5248 | 38.81 | \-0.001458 | 0.88 |
 tmarsteel.DPRNG | any | 7.993173 | 127.2305 | 72.12 | 0.002086 | 1.24 |
