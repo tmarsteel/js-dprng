@@ -2,11 +2,13 @@
 
 The DPRNG is based on a simply hash / shuffling function. That hash function is used to advance the internal state of the RNG at least once for each random number request.
 
-Test-Vectors are appended to this document (appendix 2 and 3).
+Test-Vectors are appended to this document (appendix 3 and 4).
+
+**This algorithm is not secure. DO NOT USE THIS FOR SECURITY RELATED TASKS.** See an explanation in appendix 1.
 
 ## Terminology / Notation
 
-All operations consider the values to be represented in Big-Endian encoding (that is: MSB to LSB). Except the bit-lengths of data all integer litarals in this document are written in hexadecimal notation 
+All operations consider the values to be represented in Big-Endian encoding (that is: MSB to LSB). Except the bit-lengths of data all integer literals in this document are written in hexadecimal notation
 
 The following table denotes the bitwise operation notation used in this document. It is the same as used in many modern programming languages; you can skip this if you are familiar with the bitwise and math operations of C-Like languages.
 
@@ -14,7 +16,7 @@ The following table denotes the bitwise operation notation used in this document
 | ---------: | :-------  |
 |`a ^ b`     | bitwise `a` XOR `b` |
 |`a & b`     | bitwise `a` AND `b` |
-|`a | b`     | bitwise `a` OR `b` 
+|`a | b`     | bitwise `a` OR `b`
 |`a % b`     | `a` mod `b` |
 |`abs(x)`    | the absolute value of `x` (otherwise also noted as `|x|`) |
 |`min(a, b)` | evaluates to the lesser value of `a` and `b`: `a < b? a : b` |
@@ -26,7 +28,7 @@ The following table denotes the bitwise operation notation used in this document
 
 ## The hasing / shuffling function
 
-The hash function maps a 28-bit integer to another 28-bit integer. It internally uses the Rijndael S-Box. Appendix 1 contains the Rijndael S-Box. Usage of the S-Box will be denoted as `sbox(i)` where `i` is an 8-bit integer.
+The hash function maps a 28-bit integer to another 28-bit integer. It internally uses the Rijndael S-Box. Appendix 2 contains the Rijndael S-Box. Usage of the S-Box will be denoted as `sbox(i)` where `i` is an 8-bit integer.
 
 Let the 28bit input to the function be `in`. Repeat the following steps five times:
 
@@ -53,7 +55,7 @@ function hash(in)
         b := (in >> 4) & FF;
         c := (in >> 12) & FF;
         d := (in >> 20) & FF;
-		
+
 		b' := sbox(b)
 		c' := sbox(c)
 		d' := sbox(d)
@@ -72,25 +74,25 @@ The RNG keeps an internal state value of 28bits (because the underlying hashing/
 
 If no seed is given the RNG should capture 28 random bits from the highest-quality source available (e.g. `/dev/random` on UNIX or PHPs `mcrypt_create_iv()`).
 
-In addition to the 28bit seed value the RNG also keeps a 28bit counter value that is incremented by at least 1 with each generation request (see below for details). 
+In addition to the 28bit seed value the RNG also keeps a 28bit counter value that is incremented by at least 1 with each generation request (see below for details).
 
 ### advance function
 
-The RNG is based on a function called `advance` which derives 28 bits from the internal state, mutates the inner state, increments the counter and returns the previously derived 28 bits. This is the pesudo code for the `advance`-Routine where `state` denotes the 28 bit internal state value, `counter` denotes the 28 bit counter and `hash(?)` denotes the hash function as described above.
+The RNG is based on a function called `advance` which derives 28 bits from the internal state, mutates the inner state, increments the counter and returns the previously derived 28 bits. This is the pseudo code for the `advance`-Routine where `state` denotes the 28 bit internal state value, `counter` denotes the 28 bit counter and `hash(?)` denotes the hash function as described above.
 
 ```
 function advance()
 	h := hash(state ^ counter)
-        
+
     state := state ^ hash(state)
-    
+
     counter := counter + 1
 
     if counter is greater than FFFFFFF
 	then
         counter := 0
     end if
-    
+
     return h
 ```
 
@@ -107,25 +109,25 @@ Generates and returns a pseudo-random, uniformly distributed integer value in th
 ```
 function nextInt(a, b)
 	rangeSize := b - a;
-        
+
 	nRequiredBits := min(ceil(log(rangeSize, 2)), 20)
 	result := 0
-	
+
 	if nRequiredBits is greater than 20
 	then
 	    additionalBits := 20 - nRequiredBits
 	    mask := pow(2, additionalBits) - 1
-	    
+
 	    result := ((advance() << additionalBits) | (advance() & mask);
 	else
 	    result := advance() & (pow(2, nRequiredBits) - 1)
 	end if
-	
+
 	while (a + result) is greater than b
 	do
 		result:= result / 2
 	end while
-	
+
 	return result
 ```
 
@@ -164,9 +166,22 @@ function nextBytes(n)
 	end repeat
 
 	return ar
-``` 
+```
 
-## Appendix 1: Rijndael S-Box
+## Appendix 1: Security
+
+All numbers in this appendix are base 10 by default. Hexadecimal numbers are prefixed with `0x`.
+
+This algorithm can be trivially attacked. If the attacker knows the counter value
+the internal state can be guessed within at most 2<sup>28</sup> time and constant
+space given sufficient output to verify guesses; ~56 bits will suffice.
+
+As a result, consider the salt used for the RNG to be public knowledge. This
+algorithm was designed to be **lightweight, easy to implement** and provide
+**consistent results** across the most platforms and languages possible.
+**This algorithm is not designed for any sort of security.**
+
+## Appendix 2: Rijndael S-Box
 
 The AES S-Box uniquely (that is: without collisions) maps a 8-bit integer to another 8-bit integer.
 
@@ -191,7 +206,7 @@ e1, f8, 98, 11, 69, d9, 8e, 94, 9b, 1e, 87, e9, ce, 55, 28, df,
 8c, a1, 89, 0d, bf, e6, 42, 68, 41, 99, 2d, 0f, b0, 54, bb, 16
 ```
 
-## Appendix 2: Test-Vectors for the hasing function
+## Appendix 3: Test-Vectors for the hashing function
 
 You can use these test-vectors to test implementations of this algorithm.
 
@@ -220,7 +235,7 @@ You can use these test-vectors to test implementations of this algorithm.
 |09468d7|8d325dd|
 |7c778f4|5f35741|
 
-### Step-by-Step values for `0000000` 
+### Step-by-Step values for `0000000`
 
 |# round|initial value|after sbox|sbox(x) * 7|(sbox(x) * 7) % FFFFFFF|
 |-------|-------------|----------|-----------|-----------------------|
@@ -232,7 +247,7 @@ You can use these test-vectors to test implementations of this algorithm.
 
 Output: 41272cc
 
-### Step-by-Step values for `35cf421` 
+### Step-by-Step values for `35cf421`
 
 |# round|initial value|after sbox|sbox(x) * 7|(sbox(x) * 7) % FFFFFFF|
 |-------|-------------|----------|-----------|-----------------------|
@@ -244,9 +259,9 @@ Output: 41272cc
 
 Output: ef8959c
 
-## Appendix 3: Test-Vectors for the RNG
+## Appendix 4: Test-Vectors for the RNG
 
-You can use these test-vectors to test implementations of this algorithm. Every test vector denotes the first 20, the 40th to 50th and the 90th to 100th value of `nextInt(0, FF)` 
+You can use these test-vectors to test implementations of this algorithm. Every test vector denotes the first 20, the 40th to 50th and the 90th to 100th value of `nextInt(0, FF)`
 
 ### Salt / initial state: `0000000`
 
